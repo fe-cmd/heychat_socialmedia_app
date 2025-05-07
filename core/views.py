@@ -45,44 +45,52 @@ def index(request):
 
 def signup(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        password2 = request.POST['password2']
+        username = request.POST.get('username', '').strip().lower()
+        email = request.POST.get('email', '').strip().lower()
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
 
+        # Check password match
         if password != password2:
             messages.info(request, 'Passwords do not match')
             return redirect('signup')
 
+        # Check if user already exists
         if User.objects.filter(username=username).exists():
-            messages.info(request, 'Username Taken')
+            messages.info(request, 'Username taken')
             return redirect('signup')
-
         if User.objects.filter(email=email).exists():
-            messages.info(request, 'Email Taken')
+            messages.info(request, 'Email taken')
             return redirect('signup')
 
+        # Create user safely
         user = User.objects.create_user(username=username, email=email, password=password)
-        auth.login(request, user)
-        Profile.objects.create(user=user, id_user=user.id)
-        return redirect('settings')
-    return render(request, 'signup.html')
+        user.save()  # Not strictly necessary after create_user, but safe
 
+        # Create profile
+        Profile.objects.create(user=user, id_user=user.id)
+
+        # Auto-login after signup
+        auth.login(request, user)
+        return redirect('settings')
+
+    return render(request, 'signup.html')
 
 def signin(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username', '').strip().lower()
+        password = request.POST.get('password')
+
         user = auth.authenticate(username=username, password=password)
 
-        if user:
+        if user is not None:
             auth.login(request, user)
             return redirect('/')
         else:
-            messages.info(request, 'Invalid Credentials')
+            messages.info(request, 'Invalid credentials')
             return redirect('signin')
-    return render(request, 'signin.html')
 
+    return render(request, 'signin.html')
 
 @login_required(login_url='signin')
 def logout(request):
