@@ -15,7 +15,6 @@ from django.core import files
 from itertools import chain
 import random 
 
-from core.models import Room
 from videochat.models import RoomMember
 from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm, CommentForm, CommentForms
 from account.models import Account, Video, Post, \
@@ -81,11 +80,9 @@ def register_view(request, *args, **kwargs):
         
 @login_required(login_url='login')
 def logout_view(request):
-    logout(request)
-     # Ensure the room exists or create it
-    room, created = Room.objects.get_or_create(slug='general', defaults={'name': 'General Room'})
-    
-    return redirect('home', slug=room.slug)
+	logout(request)
+	return redirect("home")
+
 
 def login_view(request, *args, **kwargs):
 	context = {}
