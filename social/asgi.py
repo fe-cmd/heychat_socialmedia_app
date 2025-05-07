@@ -4,7 +4,6 @@ ASGI config for social project.
 It exposes the ASGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-<<<<<<< HEAD
 https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 """
 
@@ -17,9 +16,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "social.settings")
 django.setup()
 application = get_default_application()
 
-=======
-https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
-"""
+
 
 import os
 
@@ -46,4 +43,3 @@ application = ProtocolTypeRouter({
     ),
     
 })
->>>>>>> f98a03bb387ce676ea1fbb6a689c3a739dfe7f67
