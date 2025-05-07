@@ -1,0 +1,409 @@
+{% extends "chat/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    
+    .prst{
+        color: #fff;
+        background: grey;
+        border: 2px solid rgb(243, 14, 148);
+        border-radius: 50%;
+        text-align: center;
+        font-size: 11px;
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        box-sizing: content-box;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -10px;
+      }
+    .forms{
+        border: 1px solid slateblue;
+        
+        width: 100%;
+        border-radius: 5px;
+        padding: 10px 10px;
+        font-size: 18px;
+    }
+
+    .emi {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .btn1 {
+        transform: translateX(-50%);
+        transition: all 200ms;  
+        cursor: pointer;
+        margin-left: 100px;
+        
+    }
+    
+</style>
+
+<div class="chat-container2">
+    <div class="identity">
+        <div>
+           <a href="{% url 'chat:crochat' %}">
+            <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            fill="currentColor"
+            class="bi bi-house"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"
+            />
+          </svg>
+           </a>
+        </div>
+
+        <h3>{{friend.user.username}}</h3>
+        <span></span>
+
+        <div class="pro-pic">
+            <img src="{{friend.user.profile_image.url}}" alt="profile-picture">                
+            {% if friend.user.is_authenticated %}
+              <div class="prst" id="presence"></div> 
+            {% else %}
+             <div class="prst" ></div> 
+            {% endif %}
+        </div>
+
+
+    </div>
+
+    <div class="sub-container">
+
+
+        <div class="chat-body" id="chat-body">
+
+            
+            {% for chat in chats %}
+            {% if chat.msg_sender == user and chat.msg_receiver == profile %}
+
+            <div class="chat-box-sent">
+                {{chat}}
+            </div>
+
+            
+
+
+            {% elif chat.msg_sender == profile and chat.msg_receiver == user %}
+
+            <div class="chat-box-received">
+                {{chat}}
+            </div>
+        
+
+            {% endif %}
+
+
+            {% endfor %}
+
+
+        
+
+            <div class="chat-box-sent" id ="chat-box-sent" style="display: none">
+               
+            </div>
+
+            
+        </div>
+    
+        <form action="" id="myform" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {{form.body}}
+
+            <span class="dropdown" style="cursor: pointer;">
+                <span class="dropdown-toggle" data-toggle="dropdown" class="d-flex">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                        <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-reels" viewBox="0 0 16 16">
+                        <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/>
+                        <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+                        <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+                        <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+                      </svg>
+                </span>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" onclick="ChooseImage()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                            <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                          </svg>
+                          <input type="file" id="imageFile" onchange="SendImage(this)" accept="image/*" style="display: none;" name="image"/>
+                        </a>
+                       <a href="#" class="dropdown-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-reels" viewBox="0 0 16 16">
+                            <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/>
+                            <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+                            <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                          </svg>
+                          <input type="file" id="videoFile" accept="video/*" />
+                        </a>
+                    <a href="#" class="dropdown-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+                            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+                          </svg>
+                        </a>
+                
+            
+                </div>
+                
+            </span>
+            <button type = "submit" id = "submit">
+                <span class="material-icons">send
+                </span>           
+             </button>
+        </form>
+
+        
+        
+           
+        <button class="btn1">
+            <img src="{% static 'icons/Untitled design (4).gif' %}" class="emi" alt="">
+        </button>
+
+    </div>
+
+</div>
+
+<script src="{% static 'js/Emoji.js' %}"></script>
+
+
+
+<script type="text/javascript">
+
+    var imageFile;
+	var base64ImageString;
+
+    new EmojiPicker({
+        trigger: [
+            {
+                insertInto: ['.forms'],
+                selector: '.btn1'
+            }
+        ],
+        closeButton: true,
+        dragButton: true
+    });
+    
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    let form = document.getElementById("myform")
+    
+    form.addEventListener("submit", sendChat)
+
+    function sendChat(e){
+        e.preventDefault()
+        let chatMessage= document.getElementById("id_body").value
+        console.log(chatMessage)
+        
+
+        const data = { msg: chatMessage };
+        
+        let url = "{% url 'chat:sent_msg' friend.user.id %}"
+
+fetch(url, {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': csrftoken
+  },
+  body: JSON.stringify(data),
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Success:', data);
+  let chat_body = document.getElementById('chat-body')
+  let chatMessageBox = document.createElement("div")
+  chatMessageBox.classList.add("chat-box-sent")
+  chatMessageBox.innerText = data
+  chat_body.append(chatMessageBox)
+  document.getElementById("id_body").value=""
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
+
+
+    }
+
+
+
+
+
+setInterval(receiveMessages, 2000)
+
+
+let counter = {{num}}
+function receiveMessages(){
+
+
+    let url = "{% url 'chat:rec_msg' friend.user.id %}"
+
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+        console.log('Success:', data);
+        
+        
+
+        if(data.length == 0){}
+
+        else{
+
+            let lastMsg = data[data.length-1]
+
+            if(counter == data.length){
+                console.log("there is no new chat")
+            }
+
+        
+        
+
+            else{
+
+
+                let chat_body = document.getElementById('chat-body')
+                let chatMessageBox = document.createElement("div") 
+                chatMessageBox.classList.add("chat-box-received")
+                chatMessageBox.innerText = lastMsg
+                chat_body.append(chatMessageBox)
+                document.getElementById("id_body").value=""
+                console.log()
+
+                console.log
+
+
+            }
+
+        }
+        
+        counter = data.length
+
+
+
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
+
+}
+
+function ChooseImage() {
+    document.getElementById('imageFile').click();
+}  
+
+/* return null if invalid or base64String if valid */
+function isImageSizeValid(image){
+    console.log("max size: {{DATA_UPLOAD_MAX_MEMORY_SIZE}}")
+    // console.log(image)
+    var startIndex = image.indexOf("base64,") + 7;
+    var base64str = image.substr(startIndex);
+    var decoded = atob(base64str);
+    console.log("FileSize: " + decoded.length);
+    if(decoded.length>= "{{DATA_UPLOAD_MAX_MEMORY_SIZE}}"){
+        return null
+    }
+    return base64str
+}
+
+function SendImage(event) {
+    let chatImage = document.get
+    var file = event.files[0];
+
+    if (!file.type.match("image.*")) {
+        alert("Please select image only");
+    }
+    else {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+            let chat_body = document.getElementById('chat-body')
+            var image = reader.result
+            var imageField = document.getElementById('chat-box-sent')
+            imageField.src = image
+            chat_body.append(imageField)
+            document.getElementById("chat-body").value="";
+            document.getElementById("chat-body").focus();
+
+            
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+}
+
+function hasNetwork(online) {
+    const element = document.querySelector("span");
+    const element1 = document.getElementById("presence");
+    // Update the DOM to reflect the current status
+    if (online) {
+      element1.style.backgroundColor = 'green'
+      element.innerText = "Online";
+    } else {
+      element1.style.backgroundColor = 'grey'
+      element.innerText = "Offline";
+    }
+  }
+   
+  window.addEventListener("load", () => {
+    hasNetwork(navigator.onLine);
+    window.addEventListener("online", () => {
+      // Set hasNetwork to online when they change to online.
+      hasNetwork(true);
+    });
+    window.addEventListener("offline", () => {
+      // Set hasNetwork to offline when they change to offline.
+      hasNetwork(false);
+    });
+  });
+  
+  
+
+
+
+
+</script>
+
+
+{% endblock %}
+

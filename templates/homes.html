@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Rooms|Djangochat</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .chat-messages {
+                height: 400px;
+                overflow-y: auto;
+            }
+        </style>
+    </head>
+
+    <body class="bg-teal-600">
+        <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
+            <div>
+                <a href="/frontpage" class="text-xl text-white">Djangochat</a>
+            </div>
+
+            <a class="vin" href="/">
+                <img style="width: 100px; height: 100px;" src="{{user_profile.profileimg.url}}" class="header-avatar" alt="">
+            </a>
+            
+            <div class="flex items-center space-x-4">
+                    <a href="/homes" class="text-white hover:text-gray-200">Rooms</a>
+
+                    <a href="/" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Home</a>
+            </div>
+        </nav>
+
+        <div class="p-10 lg:p-20 text-center">
+            <h1 class="text-3xl lg:text-6xl text-white">Rooms</h1>
+        </div>
+        
+        <div class="w-full flex flex-wrap items-center">
+            {% for home in homes %}
+                <div class="w-full lg:w-1/4 px-3 py-3">
+                    <div class="p-4 bg-white shadow rounded-xl text-center">
+                        <h2 class="mb-5 text-2xl font-semibold">{{ home.name }}</h2>
+        
+                        <a href="{% url 'home' home.slug %}" class="px-5 py-3 block rounded-xl text-white bg-teal-600 hover:bg-teal-700">Join</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </body>

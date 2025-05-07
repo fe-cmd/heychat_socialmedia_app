@@ -1,0 +1,1 @@
+MSG_TYPE_MESSAGE = 0 # For standard messages

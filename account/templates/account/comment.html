@@ -1,0 +1,215 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="{% static 'css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+	<link href="https://fonts.googleapis.com/css2?family=Material+Icons"
+      rel="stylesheet">
+	  
+    <!-- Cropperjs -->
+    <link rel="stylesheet" href="{% static 'cropperjs/dist/cropper.min.css' %}">
+
+    <!-- Markdown-it -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/11.0.1/markdown-it.min.js" integrity="sha512-hW0KbtvDnXCHbh2UCNP/6R+oXxCKiOfm9ciuUekdGBCQF1+57bGqZAk3sAFir7PMQstyRW0UecsSc2HQotH2vg==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/default.min.css" integrity="sha512-kZqGbhf9JTB4bVJ0G8HCkqmaPcRgo88F0dneK30yku5Y/dep7CZfCnNml2Je/sY4lBoqoksXz4PtVXS4GHSUzQ==" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/kotlin.min.js" integrity="sha512-8aYTnyDstX39PHxorDD+6ROknf98Vqr5KTOjwRCl/442uAVKOpCJ5wY9I3VQ6y46rdDJKYBIglIfE2+GQk8U5Q==" crossorigin="anonymous"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body class="web">
+
+{% include 'snippets/base_css.html' %}
+{% include 'snippets/base_js.html' %}
+{% include 'snippets/header.html' %}
+	
+<div class="container" id="id_loading_spinner" style="display: none">
+	<div class="d-flex flex-row mx-auto flex-grow-1 justify-content-center">
+		<div class="spinner-border text-primary" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.main{
+		min-height: 100vh;
+		height: 100%;
+	}
+	body, .web {
+		background-color: rgb(46, 46, 206);
+	  }
+	.image-container{
+		max-width: 250px;
+		height: auto;
+	}
+	.field-heading{
+		color: var(--secondary-text-color);
+	}
+	.icon-container:hover {
+		opacity: 0.3;
+		cursor: pointer;
+	}
+	.friends-icon{
+		color: #4287f5;
+		font-size: 40px;
+	}
+	.person-add-icon{
+		color: #4287f5;
+		font-size: 40px;
+	}
+	.friend-text{
+		font-weight: 500;
+		color: black;
+	}
+	.friends-btn{
+		background-color: #cccccc;
+		border-color: #cccccc;
+		color: #000;
+		font-weight: 500;
+	}
+	.friends-btn:hover {
+		background-color: #bfbfbf;
+		border-color: #bfbfbf;
+	}
+	.dropdown-toggle::after { 
+		content: none; 
+	}
+	.card{
+		border-radius: 12px;
+	}
+	.material-icons{
+		font-size: 30px;
+	}
+	.material-icons:hover{
+		cursor: pointer;
+	}
+	.confirm-friend-request{
+		color: green;
+	}
+	.confirm-friend-request:hover {
+		opacity: 0.3;
+	}
+	.decline-friend-request:hover {
+		opacity: 0.3;
+	}
+	.decline-friend-request{
+		color: red;
+	}
+	.message-btn-text{
+		font-weight: 500;
+	}
+</style>
+
+<div class="main">
+<div class="container-fluid">
+ 
+ <div class="main-comment-section">
+    <div class="container-fluid mt-2">
+        <div class="form-group row">
+            <form method='POST'>
+                {% csrf_token %}
+                {{ comment_form.as_p}}
+                {% if request.user.is_authenticated %}
+                  <input type="submit" value="Submit" class="btn btn-outline-success">
+                {% else %}
+                <input type="submit" value="Submit" class="btn btn-outline-success" disabled>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    {{ comments.count }} Comment{{ comments|pluralize}}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-left-heart-fill" viewBox="0 0 16 16">
+		<path d="M2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Zm6 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+	  </svg>
+    {% for comment in comments %}
+    <blockquote class="blockquote">
+        <p class="nb-0">{{ comment.content}}
+        </p>
+        <footer class="blockquote-footer"><small>by <cite title="Source Title">{{ comment.user|capfirst }}</cite></small>
+		<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm ml-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-all-fill" viewBox="0 0 16 16">
+			<path d="M8.021 11.9 3.453 8.62a.719.719 0 0 1 0-1.238L8.021 4.1a.716.716 0 0 1 1.079.619V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+			<path d="M5.232 4.293a.5.5 0 0 1-.106.7L1.114 7.945a.5.5 0 0 1-.042.028.147.147 0 0 0 0 .252.503.503 0 0 1 .042.028l4.012 2.954a.5.5 0 1 1-.593.805L.539 9.073a1.147 1.147 0 0 1 0-1.946l3.994-2.94a.5.5 0 0 1 .699.106z"/>
+		  </svg>-Reply</button>
+		</footer>
+    </blockquote>
+
+    <div class="replied-comments container mt-2" style="display:none;">
+        {% for reply in comment.replies.all %}
+        <blockquote class="blockquote">
+            <p class="nb-0"><small>{{ reply.content}}</small>
+            </p>
+            <footer class="blockquote-footer"><small>by <cite title="Source Title">{{ reply.user|capfirst }}</cite></small>
+            </footer>
+        </blockquote>
+        {% endfor %}
+        <div class="form-group row">
+            <form method='POST'>
+                {% csrf_token %}
+                <input type="hidden" name="{{ comment_id }}" value="{{ comment.id }}">
+                {{ comment_form.as_p}}
+                {% if request.user.is_authenticated %}
+                  <input type="submit" value="Submit" class="btn btn-outline-success">
+                {% else %}
+                <input type="submit" value="Submit" class="btn btn-outline-success" disabled>
+                {% endif %}
+               </form>
+        </div>
+    </div>
+
+    {% endfor %}
+ </div>
+
+ 
+</div>
+</div>
+
+{% include 'snippets/footer.html' %}
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+  
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script type="module" src="{% static 'cropperjs/dist/cropper.min.js' %}"></script>
+
+<script type="text/javascript">
+	function displayLoadingSpinner(isDisplayed){
+		var spinner = document.getElementById("id_loading_spinner")
+		if(isDisplayed){
+			spinner.style.display = "block"
+		}
+		else{
+			spinner.style.display = "none"
+		}
+	}
+
+	$('.reply-btn').click(function() {
+		$(this).parent().parent().next('.replied-comments').fadeToggle()
+	});
+
+
+</script>
+
+
+<script src="{% static 'js/tippy.all.min.js' %}"></script>  
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/uikit.js' %}"></script>
+<script src="{% static 'js/simplebar.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+    
+<script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+
+
+</body>
+</html>
