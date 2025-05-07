@@ -24,7 +24,8 @@ load_dotenv(dotenv_path)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://heychat-socialmedia-app.onrender.com"
+    "https://heychat-socialmedia-app.onrender.com",
+    "http://127.0.0.1:8000/",
 ]
 
 
@@ -82,8 +83,7 @@ INSTALLED_APPS = [
     "channels",
     "django.contrib.humanize",
     "django_social_share",
-    "core",  # Add the core app if Profile is here
-
+    "core.apps.CoreConfig",
 ]
 
 MIDDLEWARE = [
