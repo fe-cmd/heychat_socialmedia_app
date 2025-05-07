@@ -187,7 +187,11 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
+if not DEBUG:  # If not in DEBUG mode, assume it's production (Render)
+    MEDIA_ROOT = '/opt/render/project-name/media_cdn/'
+else:  # If in DEBUG mode, use local path
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
+
 
 TEMP = os.path.join(BASE_DIR, 'media_cdn/temp')
 
