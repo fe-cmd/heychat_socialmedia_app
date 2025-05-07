@@ -22,7 +22,7 @@ User = get_user_model()
 
 # Create your models here.
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile_user")
     id_user = models.IntegerField()
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(upload_to='profile_images', default='blank-profile-picture.png')
@@ -88,7 +88,7 @@ class Message(models.Model):
         return self.content
     
 class Profileme(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user")
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="profileme_user")
     pic = models.ImageField(upload_to="img", blank=True, null=True)
     friends = models.ManyToManyField('Friend', blank=True, related_name = "my_friends")
     

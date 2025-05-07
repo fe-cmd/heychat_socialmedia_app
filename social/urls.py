@@ -1,7 +1,6 @@
 """social URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-<<<<<<< HEAD
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
 =======
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -18,7 +17,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-<<<<<<< HEAD
 from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
@@ -111,7 +109,6 @@ if settings.DEBUG:
    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-=======
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -123,4 +120,3 @@ urlpatterns = [
 
 urlpatterns = urlpatterns+static(settings.MEDIA_URL,
 document_root=settings.MEDIA_ROOT)
->>>>>>> f98a03bb387ce676ea1fbb6a689c3a739dfe7f67

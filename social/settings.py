@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     "channels",
     "django.contrib.humanize",
     "django_social_share",
+    "core",  # Add the core app if Profile is here
+
 ]
 
 MIDDLEWARE = [
